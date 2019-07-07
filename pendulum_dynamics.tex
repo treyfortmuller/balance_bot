@@ -1,0 +1,67 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage} % package that specifies normal margins
+\usepackage{amsmath}
+\usepackage{dirtytalk}
+
+\title{Inverted Pendulum Dynamics}
+\author{Trey Fortmuller}
+\date{June 2019}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction}
+
+We'll apply Newtonian mechanics to a pendulum bob fixed on a rigid rod attached to a fixed axis of rotation. We'll then include a damping (friction) term, and a motor torque term in the case of a motor acting at axis of rotation of the pendulum.
+
+We'll start with a free body diagram of the system.
+
+FBD GOES HERE
+
+Newton's second law in angular form is
+
+$$
+\Sigma \tau = I \alpha
+$$
+
+If gravity is the only force acting on the pendulum bob, we arrive at a nonlinear second order ODE for the motion of the system:
+
+$$
+mgl\sin{\theta} = ml^2\ddot{\theta}
+$$
+
+With a damping force that is linear with the angular velocity of the pendulum subject to some damping factor $k$, we have:
+
+$$
+mgl\sin{\theta} - k\dot{\theta} = ml^2\ddot{\theta}
+$$
+
+Note that the units on the damping factor $k$ are $\bigg[\frac{N\cdot m}{\text{rad}/s} \bigg]$. Finally, including some motor torque acting at the axis of rotation of the pendulum, we have:
+
+$$
+mgl\sin{\theta} - k\dot{\theta} - \tau_m = ml^2\ddot{\theta}
+$$
+
+The motor torque will be the control input of the system in the case of controlling the inverted pendulum about the unstable \say{up} position. Now for the sake of simulating these dynamics using Scipy's \texttt{odeint} function, we'll convert this second order ODE into two first order ODEs by assigning an intermediate variable. The state of the system becomes:
+
+$$
+U = \begin{bmatrix}
+           \theta \\
+           \dot{\theta}
+    \end{bmatrix}
+$$
+
+We'll assign the intermediate variable $\omega = \dot{\theta}$, the angular velocity of the pendulum bob. Our two first order ODEs are:
+
+\begin{equation}
+    \omega = \dot{\theta}
+\end{equation}
+
+\begin{equation}
+    \dot{\omega} = \frac{g}{l}\sin{\theta} - \frac{k}{ml^2}\omega - \frac{1}{ml^2}\tau_m
+\end{equation}
+
+\end{document}
+

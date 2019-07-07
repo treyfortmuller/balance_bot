@@ -1,0 +1,99 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{fullpage} % package that specifies normal margins
+\usepackage{amsmath}
+
+\title{Inverted Pendulum on a Cart Dynamics}
+\author{Trey Fortmuller}
+\date{June 2019}
+
+\begin{document}
+
+\maketitle
+
+\section*{Introduction}
+
+Here we derive the equations of motion for the canonical control problem of the inverted pendulum on a linear cart. They can be derived via Newtonian mechanics which is a bit complicated, or a Lagrangian approach which is more elegant. We'll walk through both, references are below.
+
+\begin{itemize}
+    \item Newtonian mechanics: https://www.youtube.com/watch?v=5qJY-ZaKSic
+    \item Lagrangian mechanics: https://www.youtube.com/watch?v=7Tvo8jXlPuk
+\end{itemize}
+
+\section*{Newtonian Approach}
+
+The state variables will be $x$, the lateral position of the cart along its track, and $theta$, the angle of the pendulum with respect to the vertical such that 0 radians is the downward resting position. We'll construct free body diagrams for the cart and for the pendulum bob.
+
+SOME DIAGRAMS GO HERE
+
+Now writing Newton's second law component wise for each free body diagram we get
+
+\begin{itemize}
+    \item Cart $\hat{i}$: $F - T\sin{\theta} = M\ddot{x}$
+    \item Cart $\hat{j}$: The motion of the cart is constrained to the $\hat{i}$ direction
+    \item Pendulum $\hat{i}$: $T\sin{\theta} = ma_{px}$
+    \item Pendulum $\hat{j}$: $-mg - T\cos{\theta} = ma_{py}$
+\end{itemize}
+
+Now we can use kinematics equations to get $a_{px}$ and $a_{py}$ in terms of the state variables. The total acceleration of the pendulum is
+
+$$ a_{pend} = a_{cart} + a_{p/c} $$
+
+with $a_{p/c}$ the acceleration of the pendulum bob with respect to the cart.
+
+WHAT HAPPENS RIGHT HERE WITH THIS TERM???
+
+Because the pendulum is constraint to rotate about its pin joint in a circular motion, this equation can be rewritten:
+
+$$ a_{pend} = \ddot{x}\hat{i} + (L\ddot{\theta}\hat{e_{\theta}} - L\dot{\theta}^2\hat{e_{r}}) $$
+
+Now writing the $a_{p/c}$ term in terms of the $\hat{i}$ and $\hat{j}$ basis:
+
+$$ a_{pend} = \ddot{x}\hat{i} + L\ddot{\theta}(-\cos{\theta}\hat{i} - \sin{\theta}\hat{j}) - L\dot{\theta}^{2}(-\sin{\theta}\hat{i} + \cos{\theta}\hat{j}) $$
+
+Now we can split $a_{pend}$ into $\hat{i}$ and $\hat{j}$ components for our equations of motion. We rewrite the pendulum equations:
+
+\begin{equation}
+        \hat{i}: T\sin{\theta} = m(-L\ddot{\theta}\cos{\theta} + L\dot{\theta}^{2}\sin{\theta})
+\end{equation}
+
+\begin{equation}
+    \hat{j}: -mg -T\cos{\theta} = m(\ddot{x} - L\ddot{\theta}\sin{\theta} - L\dot{\theta}^2\cos{\theta})
+\end{equation}
+
+Now we have 3 equations describing the motion of the cart pendulum system. We can eliminate $T$, the tension on the rigid pendulum rod with the following operation:
+
+$$ (1)\cdot\cos{\theta} + (2)\cdot\sin{\theta} $$
+
+We arrive at
+
+\begin{equation}
+    -mg\sin{\theta} = m\ddot{x}\cos{\theta} - mL\ddot{\theta}
+\end{equation}
+
+In the cart $\hat{i}$-direction equation, replace $T\sin{\theta}$ with equation $(1)$'s right hand side, we get
+
+$$ F - m(-L\ddot{\theta}\cos{\theta} - mL\dot{\theta}^2\sin{\theta}) = M\ddot{x} $$
+
+\begin{equation}
+    F + mL\ddot{\theta}\cos{\theta} - mL\dot{\theta}^{2}\sin{\theta} = (m + M)\ddot{x}
+\end{equation}
+
+Equations (3) and (4) are the two nonlinear differential equations in the state variables that describe the motion of the cart/pendulum system. Notice $x$ doesn't appear in these equations, so the dynamics are agnostic to where on the track the cart is.
+
+\[
+\boxed{-mg\sin{\theta} = m\ddot{x}\cos{\theta} - mL\ddot{\theta}}
+\]
+
+\[
+\boxed{ F + mL\ddot{\theta}\cos{\theta} - mL\dot{\theta}^{2}\sin{\theta} = (m + M)\ddot{x}}
+\]
+
+We can simulate these differential equations with Matlab or SciPy's odeint integrator in python.
+
+\section*{Lagrangian Approach}
+
+
+
+\end{document}
+
